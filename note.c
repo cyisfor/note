@@ -6,6 +6,7 @@
 static void note(const char* how, int hlen,
 								 const char* file, int flen,
 								 int line, const char* fmt, va_list arg) {
+	static ssize_t prefix_offset = -1;
 	if(getenv("plain_log") == NULL) {
 		if(getenv("log_source") != NULL) {
 			if(prefix_offset == -1) {
