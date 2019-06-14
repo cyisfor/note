@@ -28,7 +28,7 @@ static void note(const char* how, int hlen,
 				maxflen = flen;
 			} else {
 				int i;
-				for(i=0;i<maxflen-flen+1;++i) {
+				for(i=0;i<maxflen-flen;++i) {
 					fputc(' ', stderr);
 				}
 			}
