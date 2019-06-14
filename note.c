@@ -6,10 +6,16 @@
 static void note(const char* how, int hlen,
 								 const char* file, int flen,
 								 int line, const char* fmt, va_list arg) {
-	fwrite(how, hlen, 1, stderr);
-	fputc(' ',stderr);
-	fwrite(file, flen, 1, stderr);
-	fprintf(stderr,":%d ",line);
+	if(getenv("plain_log") == NULL) {
+		if(getenv("log_source") != NULL) {
+			fputc(' ',stderr);
+			fwrite(file, flen, 1, stderr);
+			fprintf(stderr,":%d ",line);
+		}
+
+		fwrite(how, hlen, 1, stderr);
+		fputc(' ', stderr);
+	}
 	vfprintf(stderr,fmt,arg);
 	va_end(arg);
 	fputc('\n',stderr);
