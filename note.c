@@ -7,6 +7,7 @@ static void note(const char* how, int hlen,
 								 const char* file, int flen,
 								 int line, const char* fmt, va_list arg) {
 	static ssize_t prefix_offset = -1;
+	static size_t maxflen = 0;
 	if(getenv("plain_log") == NULL) {
 		if(getenv("log_source") != NULL) {
 			if(prefix_offset == -1) {
@@ -22,7 +23,16 @@ static void note(const char* how, int hlen,
 				prefix_offset = i;
 			}
 			fwrite(file+prefix_offset, flen-prefix_offset, 1, stderr);
-			fprintf(stderr,":%d ",line);
+			fprintf(stderr,":%d",line);
+			if(maxflen < flen) {
+				maxflen = flen;
+			} else {
+				int i;
+				for(i=0;i<maxflen-flen) {
+					fputc(' ', stderr);
+				}
+			}
+			fputc(' ', stderr);
 		}
 
 		fwrite(how, hlen, 1, stderr);
