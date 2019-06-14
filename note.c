@@ -8,8 +8,19 @@ static void note(const char* how, int hlen,
 								 int line, const char* fmt, va_list arg) {
 	if(getenv("plain_log") == NULL) {
 		if(getenv("log_source") != NULL) {
-			fputc(' ',stderr);
-			fwrite(file, flen, 1, stderr);
+			if(prefix_offset == -1) {
+				int i = 0;
+				const char* myfile = __FILE__;
+				size_t mflen = sizeof(__FILE__)-1;
+				if(mflen > flen) {
+					mflen = flen;
+				}
+				for(i=0;i<mflen;++i) {					
+					if(file[i] != myfile[i]) break;
+				}
+				prefix_offset = i;
+			}
+			fwrite(file+prefix_offset, flen-prefix_offset, 1, stderr);
 			fprintf(stderr,":%d ",line);
 		}
 
