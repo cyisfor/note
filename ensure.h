@@ -2,6 +2,12 @@
 #include <stdlib.h> // abort
 #include <stdint.h> // intptr_t
 
+#define ensure(test) { intptr_t res = ((intptr_t)test); \
+					   if(res == 0) {					\
+						   ERROR(#test " was zero.");	\
+						   abort();						\
+					   }								\
+	}
 
 #define ensure0(test) { intptr_t res = ((intptr_t)test);	\
 		if(res != 0) {																				\
